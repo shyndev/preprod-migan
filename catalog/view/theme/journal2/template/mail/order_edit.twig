@@ -1,0 +1,51 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>{{ title }}</title>
+</head>
+<body style="font-family: 'Century gothic'; font-size: 16px; color: #000000;">
+<center>
+<div style="width: 680px;">
+<a href="{{ store_url }}" title="{{ store_name }}"><img style="height: auto; width: 100;" src="http://localhost/MIGAN/image/mail_header.jpg"></a>
+<br><br>
+
+<p>
+<FONT face="Century gothic">
+{{ text_order_status }}{{ order_id }}
+{{text_order_status2}}{{ date_added }}
+{{text_order_status3}}{{ order_status }}
+</FONT>
+</p>
+
+<p>
+<FONT face="Century gothic">
+{% if link %}
+{{ text_link }}<br>
+{{ link }}
+{% endif %}
+</FONT>
+</p>
+
+<p>
+<FONT face="Century gothic">
+{% if comment %}
+{{ text_comment }}
+{{ comment }}<br>
+{{ text_footer }}
+</FONT>
+</p>
+
+<p>
+<FONT face="Century gothic">
+{% else %} 
+{{ text_footer }}
+{% endif %}
+</FONT>
+</p>
+
+ <p style="margin-top: 0px; margin-bottom: 20px;"><img style="height: auto; width: 100%;" src="http://localhost/MIGAN/image/mail_footer.png"></p>
+
+</div>
+</center>
+</body>
+</html>

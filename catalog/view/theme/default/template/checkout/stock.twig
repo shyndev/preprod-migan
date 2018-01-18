@@ -1,0 +1,448 @@
+<style type="text/css">
+	#table_stock img{
+		height: 57px;
+		width: 57px;
+	}
+	#aide_fonctionnalite{
+		font-size: 25px;
+		text-align: right;
+		color: #FC7704;
+	}
+	#aide_fonctionnalite span{
+		cursor: pointer;
+		text-shadow: 0 0 5 black;
+	}
+	#aide_fonctionnalite span:active{
+		text-shadow: 0px 1px 1px gray;
+	}
+	#aide_fonctionnalite i{
+		font-size: inherit;
+		vertical-align: middle;
+		margin-top: -3px;
+		border: 1px solid white;
+		border-radius: 50%;
+	}
+	.product-checkbox{
+		height: 30px; width: 30px; margin: 20px auto!important; display: block;
+	}
+	.btn {
+		padding: 9px 12px!important;
+	}
+	#ajouterProduit .form-group {
+		overflow: auto;
+		height: 450px;
+	}
+	#ajouterProduit img{
+		height: auto;
+		width: 50px;
+	}
+</style>
+{{ header }}
+<div id="checkout-cart" class="container">
+	<ul class="breadcrumb">
+	{% for breadcrumb in breadcrumbs %}
+	<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+	{% endfor %}
+	</ul>
+	{% if attention %}
+	<div class="alert alert-info"><i class="fa fa-info-circle"></i> {{ attention }}
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
+	{% endif %}
+	{% if success %}
+	<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
+	{% endif %}
+	{% if error_warning %}
+	<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
+	{% endif %}
+	<div class="row">{{ column_left }}
+	{% if column_left and column_right %}
+	{% set class = 'col-sm-6' %}
+	{% elseif column_left or column_right %}
+	{% set class = 'col-sm-9' %}
+	{% else %}
+	{% set class = 'col-sm-12' %}
+	{% endif %}
+	<div id="content" class="{{ class }}">{{ content_top }}
+		<div id="aide_fonctionnalite"><span> Aide <i class="glyphicon glyphicon-question-sign"></i></span></div>
+		<h1>{{ heading_title }}
+		{% if weight %}
+		&nbsp;({{ weight }})
+		{% endif %} </h1>
+		<form action="{{ action }}" method="post" enctype="multipart/form-data">
+		<div class="table-responsive">
+			<table class="table table-bordered">
+			<tbody id="table_stock">
+			
+			{% for product in products %}
+			<tr>
+				<td class="text-center">{% if product.thumb %} <a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-thumbnail" /></a> {% endif %}</td>
+				<td class="text-left"><a href="{{ product.href }}">{{ product.name }}</a> {% if not product.stock %} <span class="text-danger">***</span> {% endif %}
+				{% if product.option %}
+				{% for option in product.option %} <br />
+				<small>{{ option.name }}: {{ option.value }}</small> {% endfor %}
+				{% endif %}
+				{% if product.reward %} <br />
+				<small>{{ product.reward }}</small> {% endif %}
+				{% if product.recurring %} <br />
+				<span class="label label-info">{{ text_recurring_item }}</span> <small>{{ product.recurring }}</small> {% endif %}</td>
+				<td class="text-left">
+					<div class="input-group btn-block" style="max-width: 200px;">
+						<input type="text" name="quantity[{{ product.product_id }}]" value="{{ product.stock_client }}" size="1" class="form-control quantity stock_client" data-toggle="tooltip" data-title="Etat du stock" data-placement="bottom"/>
+						<span class="input-group-addon">/ <span class="stock_reference">{{ product.stock_reference }}</span></span>
+						<span class="input-group-btn">
+							<button type="submit" data-toggle="tooltip" title="{{ button_update }}" class="btn btn-primary"><i class="fa fa-refresh"></i></button>
+						</span>
+					</div>
+				</td>
+				<td class="text-right">{{ product.price }}</td>
+				<td class="text-right"><input type="checkbox" name="choose" class="product-checkbox" value="{{ product.product_id }}"></td>
+			</tr>
+			{% endfor %}
+			{% for voucher in vouchers %}
+			<tr>
+				<td></td>
+				<td class="text-left">{{ voucher.description }}</td>
+				<td class="text-left"></td>
+				<td class="text-left"><div class="input-group btn-block" style="max-width: 200px;">
+					<input type="text" name="" value="1" size="1" disabled="disabled" class="form-control" />
+					<span class="input-group-btn">
+					<button type="button" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger" onclick="voucher.remove('{{ voucher.key }}');"><i class="fa fa-times-circle"></i></button>
+					</span></div></td>
+				<td class="text-right">{{ voucher.amount }}</td>
+				<td class="text-right">{{ voucher.amount }}</td>
+			</tr>
+			{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		</form>
+		{% if modules %}
+		<h2>{{ text_next }}</h2>
+		<p>{{ text_next_choice }}</p>
+		<div class="panel-group" id="accordion"> {% for module in modules %}
+		{{ module }}
+		{% endfor %} </div>
+		{% endif %} <br />
+		<div class="row">
+		<div class="col-sm-4 col-sm-offset-8">
+			<table class="table table-bordered">
+			{% for total in totals %}
+			<tr>
+				<td class="text-right"><strong>{{ total.title }}:</strong></td>
+				<td class="text-right">{{ total.text }}</td>
+			</tr>
+			{% endfor %}
+			</table>
+		</div>
+		</div>
+		<div class="buttons clearfix">
+		<div class="pull-left"><button type="button" id="button_product" class="btn btn-default">{{ button_product }}</a></div>
+		<div class="pull-right"><button type="button" id="button_cart" class="btn btn-primary">{{ button_cart }}</a></div>
+		</div>
+		{{ content_bottom }}</div>
+	{{ column_right }}</div>
+</div>
+{{ footer }}
+
+<div class="modal fade" id="ajouterProduit" role="dialog">
+	<div class="modal-dialog">
+			<!-- Modal content-->
+		<div class="modal-content" style="width: 780px" >
+			<div class="modal-header" style="padding:15px 50px;">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4>
+					<span class="glyphicon glyphicon-lock"></span> Ajouter des produits
+				</h4>
+			</div>
+			<div class="modal-body" style="padding:15px 50px;">
+				<div class="row">
+					<div class="col-sm-4">
+						<input type="radio" name="categorie_produit" value="1" id="tous" checked>
+						<label for="tous">Tous</label>
+					</div>
+					<div class="col-sm-4">
+						<input type="radio" name="categorie_produit" value="59" id="viande">
+						<label for="viande">Viandes</label>
+					</div>
+					<div class="col-sm-4">
+						<input type="radio" name="categorie_produit" value="60" id="charcuterie">
+						<label for="charcuterie">Charcuteries et boudins</label>
+					</div>
+					<div class="col-sm-4">
+						<input type="radio" name="categorie_produit" value="61" id="condiment">
+						<label for="condiment">Sauces et condiments</label>
+					</div>
+					<div class="col-sm-4">
+						<input type="radio" name="categorie_produit" value="62" id="fruit">
+						<label for="fruit">Fruits et légumes</label>
+					</div>
+					<div class="col-sm-4">
+						<input type="radio" name="categorie_produit" value="63" id="boisson">
+						<label for="boisson">Boissons</label>
+					</div>
+					<div class="col-sm-4">
+						<input type="radio" name="categorie_produit" value="64" id="poisson">
+						<label for="poisson">Poissons et fruits de mer</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<table class="table table-condensed">
+						<thead>
+							<tr class="cart_menu">
+								<td class="image" style="font-size: 20px;" colspan="2">Produit</td>
+								<td class="price" style="font-size: 20px;">P.U.</td>
+								<td class="image" style="font-size: 20px;">Choix</td>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div class=" col-sm-6"> 
+					<button type="submit" class="btn btn-success btn-default pull-left" data-dismiss="modal">
+						Terminer
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	function etat_stock(stock, stock_reference){
+		var css = [], color, width, style;
+		var demi = stock_reference / 2;
+
+		if(stock == 0){
+			css = ['3px', 'inset', '#a52228', 'Stock épuisé', true]
+			// console.log('Stock épuisé');
+		} else if(stock < demi){
+			css = ['3px', 'inset', '#f38458', 'Stock bientôt épuisé', false]
+			// console.log('Stock bientôt épuisé');
+		} else {
+			css = ['1px', 'solid', '#ccc', 'Etat du stock', false]
+			// console.log('Stock satisfaisant');
+		}
+
+		return css;
+	}
+
+	$(document).ready(function(){
+		$('body').find('.stock_client').each(function(){
+			var stock = $(this).val();
+			var stock_reference = $(this).parent().find('.stock_reference').text();
+			stock_reference = stock_reference.substring(stock_reference.indexOf('/')+1);
+			stock_reference = stock_reference.trim();
+
+			var css = etat_stock(stock, stock_reference);
+			$(this).css('border-width', css[0]);
+			$(this).css('border-style', css[1]);
+			$(this).css('border-color', css[2]);
+
+			$(this).tooltip('destroy');
+			$(this).tooltip({title:css[3]});
+
+			if(css[4]){
+				$(this).parent().parent().find('.info_etat_stock').addClass('text-danger bg-danger');
+				$(this).parent().parent().find('.info_etat_stock').html('Votre stock est épuisé !');
+			} else {
+				$(this).parent().parent().find('.info_etat_stock').removeClass('text-danger bg-danger');
+				$(this).parent().parent().find('.info_etat_stock').html('');
+			}
+		});
+	});
+
+	$('body').on('change keypress', '.stock_client', function(){
+		var stock = $(this).val();
+		var stock_reference = $(this).parent().find('.stock_reference').text();
+		stock_reference = stock_reference.substring(stock_reference.indexOf('/')+1);
+		stock_reference = stock_reference.trim();
+
+		stock = parseInt(stock);
+		stock_reference = parseInt(stock_reference);
+
+		if(stock > stock_reference){
+			stock = stock_reference;
+			$(this).val(stock);
+		}
+
+		var css = etat_stock(stock, stock_reference);
+		$(this).css('border-width', css[0]);
+		$(this).css('border-style', css[1]);
+		$(this).css('border-color', css[2]);
+		
+		$(this).tooltip('destroy');
+		$(this).tooltip({title:css[3]});
+
+		if(css[4]){
+			$(this).parent().parent().find('.info_etat_stock').addClass('text-danger bg-danger');
+			$(this).parent().parent().find('.info_etat_stock').html('Votre stock est épuisé !');
+		} else {
+			$(this).parent().parent().find('.info_etat_stock').removeClass('text-danger bg-danger');
+			$(this).parent().parent().find('.info_etat_stock').html('');
+		}
+	});
+
+	$('#button_cart').click(function(){
+		$('tbody#table_stock').find('tr').find('input:checked').each(function(i, checkbox){
+			var product_id = $(checkbox).val();
+			var stock_client = $(checkbox).parent().parent().find('.quantity').val();
+			var stock_reference = $(checkbox).parent().parent().find('.stock_reference').text();
+			
+			stock_client = parseInt(stock_client);
+			stock_reference = parseInt(stock_reference);
+			
+			var quantity = stock_reference - stock_client;
+			
+			if(quantity == 0){
+				quantity = 1;
+			}
+
+			cart.add(product_id, quantity);
+		});
+
+		setTimeout(function(){
+			window.location.href = '{{ cart }}';
+		}, 2500);
+	});
+
+	function getListeProduit(type){
+		$.ajax({
+			'url':'index.php?route=checkout/stock/products',
+			'type':'GET',
+			'dataType':'JSON',
+			'data':{'type':type},
+			success: function(data){
+				$("#ajouterProduit").find('tbody').html('');
+				var categorie_produit = 'Aucune catégorie';
+				var nom_categorie;
+				var html = '';
+
+				for(var i in data)
+				{	
+					// console.log(data[i]);
+
+					nom_categorie = data[i].product_categorie;
+					
+					if(categorie_produit != nom_categorie){
+						categorie_produit = nom_categorie;
+						html += '<tr><td colspan="3"><span class="titre_categorie">'+categorie_produit+'</span></td></tr>';
+					}
+				
+					html +='<tr>';
+					html +='<td><img src="'+data[i].image+'" alt="migan"></td>';
+					html +='<td class="cart_description" style="margin:0;">';
+					html +='<span style="font-weight: bold;" class="product_name">'+data[i].name+'</span> - <span class="conditionnement">'+data[i].conditionnement+'</span>';
+					html +='<input  type="hidden" class="image" value="'+data[i].image+'"/>';
+					html +='<input  type="hidden" class="image_resize" value="'+data[i].image_resize+'"/>';
+					html +='<input  type="hidden" class="href" value="'+data[i].href+'"/>';
+					html +='<input  type="hidden" name="product_id" class="product_id" value="'+data[i].product_id+'"/>';
+					html +='</td>';
+					html +='<td class="cart_price">';
+					price = data[i].price;
+					price = price.toString().replace(".", ",");
+					html +='<p class="pu">'+price+' €</p>';
+					html +='</td>';
+					html +='<td class="cart_select">';
+					html +='<button type="button" class="btn btn-default ajouter_produit" name="ajouter"><span class="glyphicon glyphicon-plus"></span></button>';
+					html +='</td>';
+					html +='</tr>';
+				}
+
+				$("#ajouterProduit").find('tbody').html(html);
+				$("#ajouterProduit").modal();
+			}
+		});
+	}
+
+	$('#button_product').click(function(){
+		getListeProduit(1);
+	});
+
+	$('body').on('change', 'input[name=categorie_produit]', function(){
+		var type = $(this).val()
+		getListeProduit(type);
+	});
+
+	$('body').on('click','.ajouter_produit',function(){
+		var html, product_id, product_id2, arrayProduct, nouveau;
+		var tab = [];
+
+		// Initialisation des varaibles pour le tableau arrayProduct
+		product_id = $(this).parent().parent().find('.product_id').val();
+
+		var product_name = $(this).parent().parent().find('.product_name').text();
+		var conditionnement = $(this).parent().parent().find('.conditionnement').text();
+		var image = $(this).parent().parent().find('.image').val();
+		var image_resize = $(this).parent().parent().find('.image_resize').val();
+		var href = $(this).parent().parent().find('.href').val();
+
+		var tabProduit = {'product_id':product_id, 'product_name':product_name, 'conditionnement':conditionnement, 'prix':prix};
+		
+		if(image == ""){
+			image = "img/indispo.png";
+		}
+
+		var prix = $(this).parent().parent().find('.pu').text();
+		prix = prix.toString().substring(0, prix.indexOf('€'));
+		prix = prix.toString().replace(",", ".");
+		prix = prix.toString().trim();
+		prix = parseFloat(prix);
+
+		//Recherche de tous les produits déjà présent dans le stock
+		$('body').find('#table_stock').find('tr').each(function(){
+			product_id2 = $(this).find(".product-checkbox").val();
+			arrayProduct = [product_id2];
+			tab.push(arrayProduct);
+		});
+
+
+		nouveau = true;
+
+		// Comparaison des 2 tableaux afin de voir si le tableau de la commande (tab) contient le produit à ajouter
+		$.each(tab, function(i, item){
+			if(item[0] == product_id){
+				nouveau = false
+			}
+		});
+		
+		if(nouveau){
+			// Création d'une nouvelle ligne
+			var html = '';
+
+			html +='<tr>';
+			html +='<td class="text-center"><a href="'+href+'"><img src="'+image_resize+'" alt="'+product_name+'" title="'+product_name+'" class="img-thumbnail" /></a></td>';
+			html +='<td class="text-left"><a href="'+href+'">'+product_name+'</a></td>';
+			html +='<td class="text-left"><div class="input-group btn-block" style="max-width: 200px;">';
+			html +='<input type="text" name="quantity['+product_id+']" value="1" size="1" class="form-control quantity" />';
+			html +='<span class="input-group-addon">/ <span class="stock_reference">1</span></span>';
+			html +='<span class="input-group-btn">';
+			html +='<button type="submit" data-toggle="tooltip" title="{{ button_update }}" class="btn btn-primary"><i class="fa fa-refresh"></i></button>';
+			html +='</span>';
+			html +='</td>';
+			html +='<td class="text-right">'+prix+'€</td>';
+			html +='<td class="text-right"><input type="checkbox" name="choose" class="product-checkbox" value="'+product_id+'" checked></td>';
+			html +='</tr>';
+		
+			$('#table_stock').append(html);
+		}
+	});
+
+	$('#aide_fonctionnalite').find('span').click(function(){
+		$.ajax({
+			'url':'index.php?route=checkout/stock/aide',
+			'type':'GET',
+			'dataType':'HTML',
+			success: function(html){
+				var doc = window.open('', 'aide', 'width=1080,height=940');
+				doc.document.write(html);
+			}
+		});
+	});
+</script>
