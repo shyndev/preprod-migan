@@ -164,10 +164,12 @@ class ModelSaleOrder extends Model {
 			}
 		} elseif (isset($data['filter_order_status_id']) && $data['filter_order_status_id'] !== '') {
 			$sql .= " WHERE o.order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
-		} elseif (isset($data['filter_order_type_id']) && $data['filter_order_type_id'] !== '') {
-			$sql .= " WHERE o.order_type_id = '" . (int)$data['filter_order_type_id'] . "'";
 		} else {
 			$sql .= " WHERE o.order_status_id > '0'";
+		}
+
+		if (!empty($data['filter_order_type_id'])) {
+			$sql .= " AND o.order_type_id = " . (int)$data['filter_order_type_id'];
 		}
 
 		if (!empty($data['filter_order_id'])) {
@@ -277,6 +279,10 @@ class ModelSaleOrder extends Model {
 			$sql .= " WHERE order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
 		} else {
 			$sql .= " WHERE order_status_id > '0'";
+		}
+
+		if (!empty($data['filter_order_type_id'])) {
+			$sql .= " AND order_type_id = " . (int)$data['filter_order_type_id'];
 		}
 
 		if (!empty($data['filter_order_id'])) {

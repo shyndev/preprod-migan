@@ -154,17 +154,13 @@ $(document).ready(function() {
 		}
 	});
 	
-	var not_enough= $('#not_enough').val();
-		if (not_enough== 1){
-			
-		alert("Le total de la commande doit \u00EAtre sup\u00E9rieur \u00E0 20\u20AC  pour pouvoir commander");
-		window.location.href='http://localhost/MIGAN/index.php?route=checkout/cart';
-	}
-	elseif(not_enough==0) {
-	
-	window.location.href='http://localhost/MIGAN/index.php?route=checkout/checkout';
-	
-	};
+	// var not_enough= $('#not_enough').val();
+	// if (not_enough== '1'){
+	// 	alert("Le total de la commande doit \u00EAtre sup\u00E9rieur \u00E0 20\u20AC  pour pouvoir commander");
+	// 	window.location.href='http://localhost/MIGAN/index.php?route=checkout/cart';
+	// } else if(not_enough=='0') {
+	// 	window.location.href='http://localhost/MIGAN/index.php?route=checkout/checkout';
+	// }
 });
 
 {% endif %}
@@ -860,7 +856,7 @@ $(document).delegate('#button-goodie', 'click', function() {
 		data: $('#collapse-goodie input[type=\'radio\']:checked, #collapse-goodie input[type=\'checkbox\']:checked, #collapse-goodie .goodies-image.active input[type=\'hidden\'], #collapse-goodie textarea'),
 		dataType: 'json',
 		beforeSend: function() {
-			// $('#button-goodie').button('loading');
+			$('#button-goodie').button('loading');
 		},
 		success: function(data) {
 			$.ajax({

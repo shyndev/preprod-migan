@@ -112,9 +112,9 @@ class ControllerSaleOrder extends Controller {
 		if (isset($this->request->get['filter_order_type_id'])) {
 			$filter_order_type_id = $this->request->get['filter_order_type_id'];
 		} else {
-			$filter_order_type_id = '';
+			$filter_order_type_id = 1;
 		}
-		
+
 		if (isset($this->request->get['filter_total'])) {
 			$filter_total = $this->request->get['filter_total'];
 		} else {
@@ -214,7 +214,52 @@ class ControllerSaleOrder extends Controller {
 		$data['add'] = $this->url->link('sale/order/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
 		$data['delete'] = str_replace('&amp;', '&', $this->url->link('sale/order/delete', 'user_token=' . $this->session->data['user_token'] . $url, true));
 
-		$data['orders'] = array();
+		// Customers orders
+		$data['tab_orderclient'] = 'Commandes clientes';
+		$data['customers_orders'] = array();
+
+		$filter_data = array(
+			'filter_order_id'        => $filter_order_id,
+			'filter_customer'	     => $filter_customer,
+			'filter_order_status'    => $filter_order_status,
+			'filter_order_status_id' => $filter_order_status_id,
+			'filter_order_type_id'   => $filter_order_type_id,
+			'filter_total'           => $filter_total,
+			'filter_date_added'      => $filter_date_added,
+			'filter_date_modified'   => $filter_date_modified,
+			'sort'                   => $sort,
+			'order'                  => $order,
+			'start'                  => ($page - 1) * $this->config->get('config_limit_admin'),
+			'limit'                  => $this->config->get('config_limit_admin')
+		);
+		
+		$order_total = $this->model_sale_order->getTotalOrders($filter_data);
+
+		$results = $this->model_sale_order->getOrders($filter_data);
+
+		foreach ($results as $result) {
+			$data['customers_orders'][] = array(
+				'order_id'      => $result['order_id'],
+				'customer'      => $result['customer'],
+				'order_status'  => $result['order_status'] ? $result['order_status'] : $this->language->get('text_missing'),
+				'total'         => $this->currency->format($result['total'], $result['currency_code'], $result['currency_value']),
+				'date_added'    => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
+				'date_modified' => date($this->language->get('date_format_short'), strtotime($result['date_modified'])),
+				'shipping_code' => $result['shipping_code'],
+				'view'          => $this->url->link('sale/order/info', 'user_token=' . $this->session->data['user_token'] . '&order_id=' . $result['order_id'] . $url, true),
+				'edit'          => $this->url->link('sale/order/edit', 'user_token=' . $this->session->data['user_token'] . '&order_id=' . $result['order_id'] . $url, true)
+			);
+		}
+
+		if (isset($this->request->get['filter_order_type_id'])) {
+			$filter_order_type_id = $this->request->get['filter_order_type_id'];
+		} else {
+			$filter_order_type_id = 2;
+		}
+
+		// GMS orders
+		$data['tab_ordergms'] = 'Commandes grandes/moyennes surfaces';
+		$data['gms_orders'] = array();
 
 		$filter_data = array(
 			'filter_order_id'        => $filter_order_id,
@@ -236,7 +281,7 @@ class ControllerSaleOrder extends Controller {
 		$results = $this->model_sale_order->getOrders($filter_data);
 
 		foreach ($results as $result) {
-			$data['orders'][] = array(
+			$data['gms_orders'][] = array(
 				'order_id'      => $result['order_id'],
 				'customer'      => $result['customer'],
 				'order_status'  => $result['order_status'] ? $result['order_status'] : $this->language->get('text_missing'),

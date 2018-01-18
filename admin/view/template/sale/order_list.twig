@@ -101,11 +101,12 @@
 		</div>
 		<div class="panel-body">
 			<ul id="order" class="nav nav-tabs nav-justified">
-			<li class="active"><a href="#tab-orderclient" data-toggle="tab">{{ tab_orderclient }}</a></li>
-			<li class=""><a href="#tab-ordergms" data-toggle="tab">{{ tab_ordergms }}</a></li>
+				<li class="active"><a href="#tab-orderclient" data-toggle="tab">{{ tab_orderclient }}</a></li>
+				<li class=""><a href="#tab-ordergms" data-toggle="tab">{{ tab_ordergms }}</a></li>
 			</ul>
 			<div class="tab-content">
 			<div class="tab-pane active" id="tab-orderclient">
+				Commandes clientes
 				<div class="form-group">
 					<form method="post" action="" enctype="multipart/form-data" id="form-order-client">
 					<div class="table-responsive">
@@ -124,8 +125,8 @@
 						</thead>
 						<tbody>
 						
-						{% if orders %}
-						{% for order in orders %}
+						{% if customers_orders %}
+						{% for order in customers_orders %}
 						<tr>
 							<td class="text-center"> {% if order.order_id in selected %}
 							<input type="checkbox" name="selected[]" value="{{ order.order_id }}" checked="checked" />
@@ -163,6 +164,7 @@
 				</div>
 			</div><!-- tab-pane tab orderclient -->
 			<div class="tab-pane" id="tab-ordergms">
+				Commandes grandes/moyennes surfaces
 				<div class="form-group">
 					<form method="post" action="" enctype="multipart/form-data" id="form-order-gms">
 					<div class="table-responsive">
@@ -181,8 +183,8 @@
 						</thead>
 						<tbody>
 						
-						{% if orders %}
-						{% for order in orders %}
+						{% if gms_orders %}
+						{% for order in gms_orders %}
 						<tr>
 							<td class="text-center"> {% if order.order_id in selected %}
 							<input type="checkbox" name="selected[]" value="{{ order.order_id }}" checked="checked" />

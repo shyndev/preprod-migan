@@ -121,3 +121,5 @@ ALTER TABLE `migan_order` ADD `order_type_id` INT NOT NULL AFTER `date_modified`
 
 -- affecte la valeur 1 [commande de type cliente] aux commandes passées --
 UPDATE `migan_order` SET `order_type_id` = 1 ;
+
+ALTER TABLE `migan_order_total` CHANGE `value` `value` DECIMAL(15,2) NOT NULL DEFAULT '0.00';
