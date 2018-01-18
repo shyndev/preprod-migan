@@ -28,9 +28,9 @@
 			<div class="tab-content">
 			<div class="tab-pane active" id="tab-order">
 				<div class="form-group">
-				<label class="col-sm-2 control-label" for="input-customer-group">{{ entry_order_type }}</label>
+				<label class="col-sm-2 control-label" for="input-order-type">{{ entry_order_type }}</label>
 				<div class="col-sm-10">
-					<select name="customer_group_id" id="input-customer-group" class="form-control">
+					<select name="order_type_id" id="input-order-type" class="form-control">
 					{% for type in order_type %}
 					<option value="{{ type.order_type_id }}">{{ type.order_type_name }}</option>
 					{% endfor %}
@@ -66,13 +66,6 @@
 				</div>
 				</div>
 				<div class="form-group">
-				<label class="col-sm-2 control-label" for="input-customer">{{ entry_customer }}</label>
-				<div class="col-sm-10">
-					<input type="text" name="customer" value="{{ customer }}" placeholder="{{ entry_customer }}" id="input-customer" class="form-control" />
-					<input type="hidden" name="customer_id" value="{{ customer_id }}" />
-				</div>
-				</div>
-				<div class="form-group">
 				<label class="col-sm-2 control-label" for="input-customer-group">{{ entry_customer_group }}</label>
 				<div class="col-sm-10">
 					<select name="customer_group_id" id="input-customer-group" class="form-control">
@@ -84,6 +77,13 @@
 					{% endif %}
 					{% endfor %}
 					</select>
+				</div>
+				</div>
+				<div class="form-group">
+				<label class="col-sm-2 control-label" for="input-customer">{{ entry_customer }}</label>
+				<div class="col-sm-10">
+					<input type="text" name="customer" value="{{ customer }}" placeholder="{{ entry_customer }}" id="input-customer" class="form-control" />
+					<input type="hidden" name="customer_id" value="{{ customer_id }}" />
 				</div>
 				</div>
 				<div class="form-group required">
@@ -951,9 +951,31 @@
 	</div>
 	</div>
 	<script type="text/javascript"><!--
+
+function changeCustomerGroup(type){
+	if(type == '1'){ // Cliente
+		$('select#input-customer-group').removeAttr('disabled', 'disabled');
+		$('select#input-customer-group').find('option[value=4]').attr('disabled','disabled');
+	} else if(type == '2'){ // Grande Moyenne Surface
+		$('select#input-customer-group').find('option[value=4]').removeAttr('disabled', 'disabled');
+		$('select#input-customer-group').attr('disabled', 'disabled');
+		$('select#input-customer-group').val('4'); 
+	}
+}
+
+$(document).ready(function(){
+	var type = $('select[name="order_type_id"]').val();
+	changeCustomerGroup(type);
+});
+
 // Disable the tabs
 $('#order a[data-toggle=\'tab\']').on('click', function(e) {
 	return false;
+});
+
+$('select[name="order_type_id"]').on('change', function() {
+	var type = $(this).val();
+	changeCustomerGroup(type);
 });
 
 // Currency
@@ -992,8 +1014,12 @@ $('select[name=\'currency\']').trigger('change');
 // Customer
 $('input[name=\'customer\']').autocomplete({
 	'source': function(request, response) {
+		var customer_group_id = $('select#input-customer-group').val();
+		var action = {'route':'customer/customer/autocomplete', 'user_token':'{{ user_token }}', 'filter_name':encodeURIComponent(request), 'filter_customer_group':customer_group_id};
+		var param = $.param(action);
 		$.ajax({
-			url: 'index.php?route=customer/customer/autocomplete&user_token={{ user_token }}&filter_name=' +	encodeURIComponent(request),
+			url: 'index.php',
+			data: param,
 			dataType: 'json',
 			success: function(json) {
 				json.unshift({

@@ -1,1 +1,4 @@
+config.php
+admin/config.php
+dump/*
 image/cache/*

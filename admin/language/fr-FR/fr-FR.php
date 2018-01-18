@@ -143,6 +143,9 @@ $_['tab_activity'] = 'Activité récente';
 $_['tab_recurring'] = 'Profils récurrents';
 $_['tab_action'] = 'Action';
 $_['tab_google'] = 'Google';
+$_['tab_orderclient'] = 'Commandes clientes';
+$_['tab_ordergms'] = 'Commandes grandes/moyennes surfaces';
+
 // Error
 $_['error_exception'] = 'Code d’erreur (%s): %s dans %s à la ligne %s';
 $_['error_upload_1'] = 'Attention : le fichier transféré dépasse la directive upload_max_filesize dans <php.ini> !';

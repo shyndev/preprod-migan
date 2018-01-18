@@ -140,6 +140,7 @@ $_['entry_order_id'] = 'Commande n°';
 $_['entry_total'] = 'Total';
 $_['entry_date_added'] = 'Date d’ajout';
 $_['entry_date_modified'] = 'Date de modification';
+$_['entry_order_type'] = 'Type de commande';
 // Error
 $_['error_warning'] = 'Attention : veuillez vérifier le formulaire';
 $_['error_permission'] = 'Attention : vous n’avez pas la permission de modifier les commandes !';

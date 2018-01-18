@@ -133,6 +133,8 @@ class ModelCustomerCustomer extends Model {
 			'c.date_added'
 		);
 
+		$sql .= ' AND c.customer_group_id = '.$data['filter_customer_group'];
+
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 			$sql .= " ORDER BY " . $data['sort'];
 		} else {

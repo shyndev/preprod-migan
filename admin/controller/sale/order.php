@@ -215,7 +215,6 @@ class ControllerSaleOrder extends Controller {
 		$data['delete'] = str_replace('&amp;', '&', $this->url->link('sale/order/delete', 'user_token=' . $this->session->data['user_token'] . $url, true));
 
 		// Customers orders
-		$data['tab_orderclient'] = 'Commandes clientes';
 		$data['customers_orders'] = array();
 
 		$filter_data = array(
@@ -258,7 +257,6 @@ class ControllerSaleOrder extends Controller {
 		}
 
 		// GMS orders
-		$data['tab_ordergms'] = 'Commandes grandes/moyennes surfaces';
 		$data['gms_orders'] = array();
 
 		$filter_data = array(

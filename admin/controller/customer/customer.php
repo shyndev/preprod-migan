@@ -1398,6 +1398,12 @@ class ControllerCustomerCustomer extends Controller {
 				$filter_name = '';
 			}
 
+			if (isset($this->request->get['filter_customer_group'])) {
+				$filter_customer_group = $this->request->get['filter_customer_group'];
+			} else {
+				$filter_customer_group = '';
+			}
+
 			if (isset($this->request->get['filter_email'])) {
 				$filter_email = $this->request->get['filter_email'];
 			} else {
@@ -1413,11 +1419,12 @@ class ControllerCustomerCustomer extends Controller {
 			$this->load->model('customer/customer');
 
 			$filter_data = array(
-				'filter_name'      => $filter_name,
-				'filter_email'     => $filter_email,
-				'filter_affiliate' => $filter_affiliate,
-				'start'            => 0,
-				'limit'            => 5
+				'filter_name'			=> $filter_name,
+				'filter_customer_group'	=> $filter_customer_group,
+				'filter_email'			=> $filter_email,
+				'filter_affiliate'		=> $filter_affiliate,
+				'start'					=> 0,
+				'limit'					=> 5
 			);
 
 			$results = $this->model_customer_customer->getCustomers($filter_data);
