@@ -5,7 +5,7 @@ class Smtp {
 	public $smtp_username;
 	public $smtp_password;
 	public $smtp_port = 25;
-	public $smtp_timeout = 5;
+	public $smtp_timeout = 60;
 	public $verp = false;
 
 	public function send() {
