@@ -1,18 +1,19 @@
 <?php
+
 // HTTP
-define('HTTP_SERVER', 'http://192.168.1.49/migan/admin/');
-define('HTTP_CATALOG', 'http://192.168.1.49/migan/');
+define('HTTP_SERVER', 'https://miganmq.com/admin/');
+define('HTTP_CATALOG', 'https://miganmq.com/');
 
 // HTTPS
-define('HTTPS_SERVER', 'http://192.168.1.49/migan/admin/');
-define('HTTPS_CATALOG', 'http://192.168.1.49/migan/');
+define('HTTPS_SERVER', 'https://miganmq.com/admin/');
+define('HTTPS_CATALOG', 'https://miganmq.com/');
 
 // DIR
-define('DIR_APPLICATION', 'C:/wampserver/www/migan/admin/');
-define('DIR_SYSTEM', 'C:/wampserver/www/migan/system/');
-define('DIR_IMAGE', 'C:/wampserver/www/migan/image/');
-define('DIR_STORAGE', 'C:/wampserver/storage/');
-define('DIR_CATALOG', 'C:/wampserver/www/migan/catalog/');
+define('DIR_APPLICATION', '/home/ie2n3gia/public_html/admin/');
+define('DIR_SYSTEM', '/home/ie2n3gia/public_html/system/');
+define('DIR_IMAGE', '/home/ie2n3gia/public_html/image/');
+define('DIR_STORAGE', '/home/ie2n3gia/ocartdata/storage/');
+define('DIR_CATALOG', '/home/ie2n3gia/public_html/catalog/');
 define('DIR_LANGUAGE', DIR_APPLICATION . 'language/');
 define('DIR_TEMPLATE', DIR_APPLICATION . 'view/template/');
 define('DIR_CONFIG', DIR_SYSTEM . 'config/');
@@ -26,9 +27,9 @@ define('DIR_UPLOAD', DIR_STORAGE . 'upload/');
 // DB
 define('DB_DRIVER', 'mysqli');
 define('DB_HOSTNAME', 'localhost');
-define('DB_USERNAME', 'root');
-define('DB_PASSWORD', '');
-define('DB_DATABASE', 'miganoc');
+define('DB_USERNAME', 'ie2n3gia_dev');
+define('DB_PASSWORD', '@lovely25');
+define('DB_DATABASE', 'ie2n3gia_miganoc');
 define('DB_PORT', '3306');
 define('DB_PREFIX', 'migan_');
 
