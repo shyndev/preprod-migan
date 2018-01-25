@@ -1,9 +1,9 @@
 <?php
 // HTTP
-define('HTTP_SERVER', 'http://192.168.1.49/migan/');
+define('HTTP_SERVER', 'http://192.168.1.49/preprod/migan/');
 
 // HTTPS
-define('HTTPS_SERVER', 'http://192.168.1.49/migan/');
+define('HTTPS_SERVER', 'http://192.168.1.49/preprod/migan/');
 
 // DIR
 define('DIR_APPLICATION', 'C:/wampserver/www/migan/catalog/');
