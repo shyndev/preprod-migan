@@ -37,7 +37,7 @@ class ControllerCommonHeader extends Controller {
 		print('<pre>');
 		var_dump($this->language);
 		print('</pre>');
-		
+
 		$data['direction'] = $this->language->get('direction');
 
 		$data['name'] = $this->config->get('config_name');
