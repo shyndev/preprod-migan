@@ -1,6 +1,7 @@
 <?php
 class ControllerCommonTest extends Controller {
 	public function index() {
+		print('<pre>');
 		// Store
 		if ($this->request->server['HTTPS']) {
 			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "store WHERE REPLACE(`ssl`, 'www.', '') = '" . $this->db->escape('https://' . str_replace('www.', '', $_SERVER['HTTP_HOST']) . rtrim(dirname($_SERVER['PHP_SELF']), '/.\\') . '/') . "'");
@@ -92,6 +93,12 @@ class ControllerCommonTest extends Controller {
 		if (!array_key_exists($code, $languages)) {
 			$code = $this->config->get('config_language');
 		}
+<<<<<<< HEAD
+=======
+		var_dump($code);
+
+		$code = 'fr-FR';
+>>>>>>> d9698b833a7f848a9e91c025394503c283e62a58
 		
 		if (!isset($this->session->data['language']) || $this->session->data['language'] != $code) {
 			$this->session->data['language'] = $code;
@@ -198,5 +205,6 @@ class ControllerCommonTest extends Controller {
 		
 		// OpenBay Pro
 		$this->registry->set('openbay', new Openbay($this->registry));					
+		print('</pre>');
 	}
 }
