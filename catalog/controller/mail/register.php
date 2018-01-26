@@ -65,7 +65,8 @@ class ControllerMailRegister extends Controller {
 		$mail->setSender(html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8'));
 		$mail->setSubject(sprintf($this->language->get('text_subject'), html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8')));
 		$mail->setHTML($this->load->view('mail/register', $data));
-		$mail->send(); 
+		var_dump($mail);
+		$mail->send();
 	}
 	
 	public function alert(&$route, &$args, &$output) {
