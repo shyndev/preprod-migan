@@ -1,6 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-
 class ControllerCommonHeader extends Controller {
 	public function index() {
 		// Analytics
@@ -35,7 +33,6 @@ class ControllerCommonHeader extends Controller {
 		$data['styles'] = $this->document->getStyles();
 		$data['scripts'] = $this->document->getScripts('header');
 		$data['lang'] = $this->language->get('code');
-		
 		$data['direction'] = $this->language->get('direction');
 
 		$data['name'] = $this->config->get('config_name');
