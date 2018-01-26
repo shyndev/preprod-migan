@@ -9,7 +9,6 @@ class ControllerCommonHeader extends Controller {
 		$data['analytics'] = array();
 
 		$analytics = $this->model_setting_extension->getExtensions('analytics');
-		var_dump($analytics);
 
 		foreach ($analytics as $analytic) {
 			if ($this->config->get('analytics_' . $analytic['code'] . '_status')) {
@@ -36,12 +35,11 @@ class ControllerCommonHeader extends Controller {
 		$data['styles'] = $this->document->getStyles();
 		$data['scripts'] = $this->document->getScripts('header');
 		$data['lang'] = $this->language->get('code');
-		$data['lang'] = 'fr';
 
 		print('<pre>');
 		var_dump($data['lang']);
 		print('</pre>');
-
+		
 		$data['direction'] = $this->language->get('direction');
 
 		$data['name'] = $this->config->get('config_name');
