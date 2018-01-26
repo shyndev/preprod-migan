@@ -46,26 +46,19 @@ class ControllerCommonTest extends Controller {
 		
 		$languages = $this->model_localisation_language->getLanguages();
 		
-		var_dump($languages);
-		
 		if (isset($this->session->data['language'])) {
 			$code = $this->session->data['language'];
 		}
 				
-		var_dump($code);
-		
 		if (isset($this->request->cookie['language']) && !array_key_exists($code, $languages)) {
 			$code = $this->request->cookie['language'];
 		}
-		
-		var_dump($code);
 
 		// Language Detection
 		if (!empty($this->request->server['HTTP_ACCEPT_LANGUAGE']) && !array_key_exists($code, $languages)) {
 			$detect = '';
 			
 			$browser_languages = explode(',', $this->request->server['HTTP_ACCEPT_LANGUAGE']);
-			var_dump($browser_languages);
 			
 			// Try using local to detect the language
 			foreach ($browser_languages as $browser_language) {
@@ -96,18 +89,21 @@ class ControllerCommonTest extends Controller {
 			
 			$code = $detect ? $detect : '';
 		}
-		var_dump($code);
 		
 		if (!array_key_exists($code, $languages)) {
 			$code = $this->config->get('config_language');
 		}
+<<<<<<< HEAD
+=======
 		var_dump($code);
 
 		$code = 'fr-FR';
+>>>>>>> d9698b833a7f848a9e91c025394503c283e62a58
 		
 		if (!isset($this->session->data['language']) || $this->session->data['language'] != $code) {
 			$this->session->data['language'] = $code;
 		}
+		
 		var_dump($this->session->data['language']);
 				
 		if (!isset($this->request->cookie['language']) || $this->request->cookie['language'] != $code) {
@@ -116,8 +112,9 @@ class ControllerCommonTest extends Controller {
 				
 		// Overwrite the default language object
 		$language = new Language($code);
-		$language->load($code);
+		var_dump($language);
 
+		$language->load($code);
 		var_dump($language);
 
 		
